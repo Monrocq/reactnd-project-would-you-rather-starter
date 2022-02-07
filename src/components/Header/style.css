@@ -1,0 +1,21 @@
+.trapeze:hover {
+  /* optional - feel free to remove it */
+  /* height: 150px; */ /* optional - feel free to remove it */
+  position: relative;
+}
+
+.trapeze:hover:before {
+  content: "";
+  position: absolute;
+  border: 3px solid teal;
+
+  top: 0px;
+  bottom: -30%;
+  left: -3%;
+  right: -3%;
+  z-index: -1;
+
+  -webkit-transform: perspective(50em) rotateX(60deg);
+  transform: perspective(50em) rotateX(60deg);
+  border-radius: 10px 10px 0px 0px;
+}

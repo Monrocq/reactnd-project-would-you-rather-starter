@@ -1,13 +1,18 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
-import {handleInitialData} from './actions/shared';
+import {receiveUsers} from './actions/users';
 import './App.css';
 import Header from './components/Header';
 import SignIn from './components/SignIn';
+import {_getUsers} from './utils/_DATA'
 
 function App({dispatch, users}) {
   useEffect(() => {
-    dispatch(handleInitialData())
+    _getUsers().then(users => {
+      console.log(users)
+      dispatch(receiveUsers(users))
+    }) 
+    //_getUsers()
   }, [dispatch])
   return (
     <div className="App">

@@ -2,10 +2,10 @@ import React from 'react'
 import authedUser from '../../reducers/authedUser'
 import './style.css'
 
-function NavItem({name, action, image}) {
+function NavItem({name, action, image, active}) {
   return (
     <div 
-      className="px-7 pb-3 pt-9 trapeze flex justify-center items-center" 
+      className={"px-7 pb-3 pt-9 trapeze flex justify-center items-center "+(active && "trapeze-active")}
       onClick={action ? action : undefined}
     >
       <li className="text-center">{name}</li>

@@ -4,6 +4,8 @@ import logo from '../../assets/logo.svg';
 import './style.css';
 import { setAuthedUser } from '../../actions/authedUser';
 
+export const SIGNIN_PATH = '/signin'
+
 function SignIn({users, dispatch}) {
   function signIn(e) {
     e.preventDefault()

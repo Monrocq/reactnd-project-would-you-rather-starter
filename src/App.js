@@ -1,37 +1,31 @@
 import React, {useEffect} from 'react';
 import {connect} from 'react-redux';
 import {receiveUsers} from './actions/users';
-import { receiveQuestions } from './actions/questions';
 import './App.css';
 import Header from './components/Header';
 import SignIn, {SIGNIN_PATH} from './components/SignIn';
-import {_getUsers, _getQuestions} from './utils/_DATA';
+import {_getUsers} from './utils/_DATA';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home, {HOME_PATH} from './components/Home';
-import { showLoading, hideLoading } from 'react-redux-loading'
+import Home, {HOME_PATH} from './screens/Home';
+import QuestionItem from './components/QuestionItem';
+import LoadingBar from 'react-redux-loading'
 
-function App({dispatch, authedUser = {id: ""}}) {
+function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoading, hideLoading}) {
   useEffect(() => {
     _getUsers().then(users => {
-      dispatch(receiveUsers(users))
+      getUsers(users)
     });
-  }, [dispatch]);
-  useEffect(() => {
-    dispatch(showLoading())
-    _getQuestions().then(questions => {
-      dispatch(receiveQuestions(questions, authedUser && authedUser.id));
-      dispatch(hideLoading());
-    })
-  }, [authedUser, dispatch])
+  }, [getUsers]);
   return (
     <Router>
       <div className="App">
         <Header />
+        <LoadingBar/>
         <Routes>
-          {!authedUser ? <Route path={HOME_PATH} element={<SignIn/>}/> : 
+          {!authedUser ? <Route path={HOME_PATH} element={<SignIn/>}/> :
           <>
             <Route exact path={HOME_PATH} element={<Home/>}/>
-            <Route path={SIGNIN_PATH} component={<SignIn/>}/> 
+            <Route exact path='/question/:id' element={loading ? <LoadingBar/> : <QuestionItem />}/>
           </>}
         </Routes>
       </div>
@@ -39,10 +33,17 @@ function App({dispatch, authedUser = {id: ""}}) {
   );
 }
 
-function mapStateToProps({authedUser}) {
+function mapStateToProps({authedUser, questions}) {
   return {
-    authedUser
+    authedUser,
+    loading: Object.keys(questions).length === 0
   }
 }
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    getUsers: users => dispatch(receiveUsers(users))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

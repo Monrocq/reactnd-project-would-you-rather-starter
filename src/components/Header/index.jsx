@@ -3,7 +3,7 @@ import NavItem from './NavItem'
 import {connect} from 'react-redux'
 import { setAuthedUser } from '../../actions/authedUser';
 import { useLocation } from 'react-router-dom';
-import {HOME_PATH} from '../Home'
+import {HOME_PATH} from '../../screens/Home'
 
 function Header({authedUser, dispatch}) {
   const location = useLocation();
@@ -21,7 +21,7 @@ function Header({authedUser, dispatch}) {
   return (
     <nav className="w-screen border-b-2 border-b-primary-color">
       <ul className="flex justify-center cursor-pointer">
-        <NavItem name="Home" active={location.pathname === HOME_PATH && authedUser} />
+        <NavItem name="Home" active={location.pathname === HOME_PATH && authedUser} link={HOME_PATH} />
         <NavItem name="New Question" />
         <NavItem name="Leader Board" />
         {authedUser === null ? (

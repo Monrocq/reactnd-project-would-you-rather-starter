@@ -6,7 +6,7 @@ export default function questions (state = {}, {type, questions, authedUser}) {
       let unansweredQuestions = {};
       let answeredQuestions = {};
       Object.entries(questions).forEach(([key, value]) => {
-        if (value.optionOne.votes.includes(authedUser)) {
+        if (value.optionOne.votes.includes(authedUser) || value.optionTwo.votes.includes(authedUser)) {
           answeredQuestions[key] = value;
         } else {
           unansweredQuestions[key] = value;

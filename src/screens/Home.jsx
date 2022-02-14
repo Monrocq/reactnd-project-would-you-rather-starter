@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import TabItem from './TabItem';
-import QuestionItem from './QuestionItem';
-import LoadingBar from 'react-redux-loading'
+import TabItem from '../components/home/TabItem';
+import QuestionItem from '../components/QuestionItem';
+import LoadingBar from 'react-redux-loading';
+import { showLoading, hideLoading } from 'react-redux-loading';
+import { receiveQuestions } from '../actions/questions';
+import {_getQuestions} from '../utils/_DATA';
 
 export const HOME_PATH = '/';
 
@@ -21,8 +24,15 @@ export class Home extends Component {
       })
     }
   }
+  componentDidMount() {
+    this.props.getQuestions({}, this.props.authedUser)
+    this.props.showLoading();
+    _getQuestions().then(questions => {
+      this.props.getQuestions(questions, this.props.authedUser);
+      this.props.hideLoading()
+    })
+  }
   render() {
-    console.log(this.props.questions)
     const questions = this.state.tabIndex === 0 ? this.props.questions.unansweredQuestions : this.props.questions.answeredQuestions;
     if (this.props.loading) {
       return <LoadingBar/>
@@ -43,19 +53,28 @@ export class Home extends Component {
             </TabItem>
           </summary>
           <section className="p-3">
-            {Object.entries(questions).map(([id, question]) => (
+            {Object.keys(questions).length > 0 ? Object.entries(questions).map(([id, question]) => (
               <QuestionItem key={id} question={question} user={this.props.users[question.author]} />
-            ))}
+            )) : "Updating..."}
           </section>
       </main>
     )
   }
 }
 
-const mapStateToProps = ({questions, users}) => ({
+const mapStateToProps = ({questions, users, authedUser}) => ({
   questions,
   users,
-  loading: Object.keys(questions).length === 0
+  authedUser,
+  loading: Object.keys(questions).length === 0 || Object.keys(users).length === 0
 })
 
-export default connect(mapStateToProps)(Home)
+const mapDispatchToProps = dispatch => {
+  return {
+    getQuestions: (questions, authedUser) => dispatch(receiveQuestions(questions, authedUser && authedUser.id)),
+    showLoading: () => dispatch(showLoading()),
+    hideLoading: () => dispatch(hideLoading())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

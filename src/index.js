@@ -5,9 +5,18 @@ import App from './App';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import {createStore} from 'redux';
-import reducer from './reducers'
+import reducer from './reducers';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { loadState, saveState } from './utils/localStorage';
 
-const store = createStore(reducer)
+const persistedState = loadState();
+const store = createStore(reducer, persistedState, composeWithDevTools())
+
+store.subscribe(() => {
+  saveState({
+    authedUser: store.getState().authedUser
+  });
+});
 
 ReactDOM.render(
   <React.StrictMode>

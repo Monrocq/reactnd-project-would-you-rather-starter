@@ -7,20 +7,19 @@ import {HOME_PATH} from '../Home'
 
 function Header({authedUser, dispatch}) {
   const location = useLocation();
-  console.log(location.pathname)
   function logOut() {
     dispatch(setAuthedUser(null))
   }
   function accountItems(actions) {
     return (
       <>
-        <NavItem name="Hello, Adel Malik" image={actions ? authedUser.avatarURL : 'thumbnails/Adel.jpeg'}/>
+        <NavItem name={"Hello, "+ (actions ? authedUser.name : "inconnu")} image={actions ? authedUser.avatarURL : 'thumbnails/Adel.jpeg'}/>
         <NavItem name="Logout" action={actions && logOut} />
       </>
     )
   }
   return (
-    <nav className="w-screen border-b-2 border-b-emerald-500">
+    <nav className="w-screen border-b-2 border-b-primary-color">
       <ul className="flex justify-center cursor-pointer">
         <NavItem name="Home" active={location.pathname === HOME_PATH && authedUser} />
         <NavItem name="New Question" />

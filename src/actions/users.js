@@ -11,8 +11,10 @@ export function receiveUsers(users) {
 }
 
 export function getUsers() {
-  return (dispatch) => {
+  return async dispatch => {
     dispatch(showLoading());
-    return fetchUsers().then(users => dispatch(receiveUsers(users))).then(() => dispatch(hideLoading()))
+    const users = await fetchUsers();
+    dispatch(receiveUsers(users));
+    return dispatch(hideLoading());
   }
 }

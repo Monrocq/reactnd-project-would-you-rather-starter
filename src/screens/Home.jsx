@@ -3,16 +3,14 @@ import { connect } from 'react-redux'
 import TabItem from '../components/home/TabItem';
 import QuestionItem from '../components/QuestionItem';
 import LoadingBar from 'react-redux-loading';
-import { showLoading, hideLoading } from 'react-redux-loading';
-import { receiveQuestions } from '../actions/questions';
-import {_getQuestions} from '../utils/_DATA';
+import { getQuestions, receiveQuestions } from '../actions/questions';
 
 export const HOME_PATH = '/';
 
 export class Home extends Component {
   state = {
     tabIndex: 0,
-    loading: false
+    loading: true
   }
   constructor(props) {
     super(props);
@@ -26,18 +24,10 @@ export class Home extends Component {
     }
   }
   componentDidMount() {
-    this.props.getQuestions({}, this.props.authedUser)
-    this.setState({
-      loading: true
-    })
-    this.props.showLoading();
-    _getQuestions().then(questions => {
-      this.props.getQuestions(questions, this.props.authedUser);
-      this.props.hideLoading()
-      this.setState({
-        loading: false
-      })
-    })
+    this.props.cleanQuestions(this.props.authedUser)
+    this.props.getQuestions(this.props.authedUser).then(_ => this.setState({
+      loading: false
+    }))
   }
   render() {
     const questions = this.state.tabIndex === 0 ? this.props.questions.unansweredQuestions : this.props.questions.answeredQuestions;
@@ -80,9 +70,8 @@ const mapStateToProps = ({questions, users, authedUser}) => ({
 
 const mapDispatchToProps = dispatch => {
   return {
-    getQuestions: (questions, authedUser) => dispatch(receiveQuestions(questions, authedUser && authedUser.id)),
-    showLoading: () => dispatch(showLoading()),
-    hideLoading: () => dispatch(hideLoading())
+    getQuestions: (authedUser) => dispatch(getQuestions(authedUser)),
+    cleanQuestions: (authedUser) => dispatch(receiveQuestions({}, authedUser))
   }
 }
 

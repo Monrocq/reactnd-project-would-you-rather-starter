@@ -10,6 +10,7 @@ import Home, {HOME_PATH} from './screens/Home';
 import QuestionItem from './components/QuestionItem';
 import LoadingBar from 'react-redux-loading'
 import NewQuestion, {CREATE_PATH} from './screens/NewQuestion';
+import LeaderBoard, {BOARD_PATH} from './screens/LeaderBoard';
 
 function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoading, hideLoading}) {
   useEffect(() => {
@@ -32,6 +33,7 @@ function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoadin
           {!authedUser ? <Route path={HOME_PATH} element={<SignIn/>}/> :
           <>
             <Route exact path={HOME_PATH} element={<Home/>}/>
+            <Route exact path={BOARD_PATH} element={<LeaderBoard/>}/>
             <Route exact path={CREATE_PATH} element={loadComponent(<NewQuestion />)}/>
             <Route exact path='/question/:id' element={loadComponent(<QuestionItem/>)}/>
             <Route exact path='/result/:id' element={loadComponent(<QuestionItem answered={true}/>)}/>

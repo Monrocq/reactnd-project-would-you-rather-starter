@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {addQuestion} from '../actions/questions';
 import { showLoading, hideLoading } from 'react-redux-loading';
 import { useNavigate } from 'react-router';
+import {HOME_PATH} from './Home';
 
 export const CREATE_PATH = '/add';
 
@@ -19,7 +20,7 @@ export function NewQuestion({authedUser, showLoading, hideLoading, addNewQuestio
     showLoading();
     _saveQuestion(question).then(result => {
       addNewQuestion(result);
-      navigate('/question/'+result.id)
+      navigate(HOME_PATH)
       hideLoading()
     }).catch(error => console.log(error))
   }

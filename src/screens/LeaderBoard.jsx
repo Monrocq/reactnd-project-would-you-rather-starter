@@ -1,34 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import {_getUsers} from '../utils/_DATA';
-import {receiveUsers} from '../actions/users';
-import LoadingBar from 'react-redux-loading'
-import { showLoading, hideLoading } from 'react-redux-loading';
+import {getUsers} from '../actions/users';
+
 
 export const BOARD_PATH = '/leaderboard';
 
 export class LeaderBoard extends Component {
-  state = {
-    loading: true
-  }
   componentDidMount() {
-    this.props.showLoading();
-    _getUsers().then(users => {
-      this.props.updateUsers(users);
-      this.setState({
-        loading: false
-      });
-      this.props.hideLoading();
-    });
+    this.props.updateUsers();
   }
   render() {
     let usersOrdered = Object.values(this.props.users).sort((a, b) => (
       (Object.keys(b.answers).length + Object.keys(b.questions).length) - (Object.keys(a.answers).length + Object.keys(a.questions).length)
-    ))
-    if (this.state.loading) {
-      return <LoadingBar/>
-    }
+    ));
     return (
       <main>
         {usersOrdered.map((user, index) => {
@@ -56,9 +41,7 @@ const mapStateToProps = ({users}) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateUsers: users => dispatch(receiveUsers(users)),
-  showLoading: () => dispatch(showLoading()),
-  hideLoading: () => dispatch(hideLoading())
+  updateUsers: () => dispatch(getUsers()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeaderBoard)

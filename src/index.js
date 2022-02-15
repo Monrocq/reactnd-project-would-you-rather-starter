@@ -4,13 +4,19 @@ import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import {createStore} from 'redux';
+import {createStore, compose} from 'redux';
 import reducer from './reducers';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { loadState, saveState } from './utils/localStorage';
+import {applyMiddleware} from '@reduxjs/toolkit';
+import thunk from 'redux-thunk'
 
 const persistedState = loadState();
-const store = createStore(reducer, persistedState, composeWithDevTools())
+const store = createStore(
+  reducer,
+  persistedState,
+  compose(applyMiddleware(thunk), composeWithDevTools())
+)
 
 store.subscribe(() => {
   saveState({

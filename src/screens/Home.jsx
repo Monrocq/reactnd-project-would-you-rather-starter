@@ -54,7 +54,7 @@ export class Home extends Component {
           </summary>
           <section className="p-3">
             {Object.keys(questions).length > 0 ? Object.entries(questions).map(([id, question]) => (
-              <QuestionItem key={id} question={question} user={this.props.users[question.author]} />
+              <QuestionItem key={id} question={question} user={this.props.users[question.author]} answered={this.state.tabIndex === 1} />
             )) : "Updating..."}
           </section>
       </main>

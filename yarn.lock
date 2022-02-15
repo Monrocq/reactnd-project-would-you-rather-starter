@@ -7164,6 +7164,11 @@ react-lifecycles-compat@^3.0.2:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-percent-bar@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-percent-bar/-/react-percent-bar-0.0.2.tgz#7f920e7c31c66e2a8d314b85a03ba6a070ab58ab"
+  integrity sha512-Lu9R84PNupylUsk1fHZM37AA4KI8jSs9JFQqq2x60lWZwjTjIJ6hOtYKmunm8CHLj7GRcT5+v44kUkfIAl89yw==
+
 react-redux-loading@^4.6.1:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/react-redux-loading/-/react-redux-loading-4.6.1.tgz#29b3e3d90625b00cd795423fd9cdb1b4ca09438e"

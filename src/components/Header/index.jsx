@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import { setAuthedUser } from '../../actions/authedUser';
 import { useLocation } from 'react-router-dom';
 import {HOME_PATH} from '../../screens/Home'
+import {CREATE_PATH} from '../../screens/NewQuestion';
 
 function Header({authedUser, dispatch}) {
   const location = useLocation();
@@ -22,7 +23,7 @@ function Header({authedUser, dispatch}) {
     <nav className="w-screen border-b-2 border-b-primary-color">
       <ul className="flex justify-center cursor-pointer">
         <NavItem name="Home" active={location.pathname === HOME_PATH && authedUser} link={HOME_PATH} />
-        <NavItem name="New Question" />
+        <NavItem name="New Question" active={location.pathname === CREATE_PATH} link={CREATE_PATH}/>
         <NavItem name="Leader Board" />
         {authedUser === null ? (
           <div className="opacity-0 flex">

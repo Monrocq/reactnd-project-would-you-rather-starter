@@ -1,6 +1,6 @@
-import { RECEIVE_QUESTIONS } from "../actions/questions";
+import { ADD_QUESTION, RECEIVE_QUESTIONS } from "../actions/questions";
 
-export default function questions (state = {}, {type, questions, authedUser}) {
+export default function questions (state = {}, {type, questions, authedUser, question}) {
   switch(type) {
     case RECEIVE_QUESTIONS:
       let unansweredQuestions = {};
@@ -17,8 +17,15 @@ export default function questions (state = {}, {type, questions, authedUser}) {
         answeredQuestions,
         unansweredQuestions
       }
+    case ADD_QUESTION:
+      return {
+        ...state,
+        unansweredQuestions: {
+          ...state.unansweredQuestions,
+          [question.id]: question
+        }
+      }
     default:
       return state;
   }
 }
-//te

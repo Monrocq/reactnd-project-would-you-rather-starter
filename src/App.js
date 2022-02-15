@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home, {HOME_PATH} from './screens/Home';
 import QuestionItem from './components/QuestionItem';
 import LoadingBar from 'react-redux-loading'
+import NewQuestion, {CREATE_PATH} from './screens/NewQuestion';
 
 function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoading, hideLoading}) {
   useEffect(() => {
@@ -16,6 +17,12 @@ function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoadin
       getUsers(users)
     });
   }, [getUsers]);
+  function loadComponent(component) {
+    if (loading) {
+      return <LoadingBar/>
+    }
+    return component;
+  }
   return (
     <Router>
       <div className="App">
@@ -25,7 +32,9 @@ function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoadin
           {!authedUser ? <Route path={HOME_PATH} element={<SignIn/>}/> :
           <>
             <Route exact path={HOME_PATH} element={<Home/>}/>
-            <Route exact path='/question/:id' element={loading ? <LoadingBar/> : <QuestionItem />}/>
+            <Route exact path={CREATE_PATH} element={loadComponent(<NewQuestion />)}/>
+            <Route exact path='/question/:id' element={loadComponent(<QuestionItem/>)}/>
+            <Route exact path='/result/:id' element={loadComponent(<QuestionItem answered={true}/>)}/>
           </>}
         </Routes>
       </div>

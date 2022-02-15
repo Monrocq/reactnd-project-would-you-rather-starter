@@ -1,17 +1,37 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import {_getUsers} from '../utils/_DATA';
+import {receiveUsers} from '../actions/users';
+import LoadingBar from 'react-redux-loading'
+import { showLoading, hideLoading } from 'react-redux-loading';
 
-export const BOARD_PATH = '/leader-board';
+export const BOARD_PATH = '/leaderboard';
 
 export class LeaderBoard extends Component {
-  usersOrdered = Object.values(this.props.users).sort((a, b) => (
-    (Object.keys(b.answers).length + Object.keys(b.questions).length) - (Object.keys(a.answers).length + Object.keys(a.questions).length)
-  ))
+  state = {
+    loading: true
+  }
+  componentDidMount() {
+    this.props.showLoading();
+    _getUsers().then(users => {
+      this.props.updateUsers(users);
+      this.setState({
+        loading: false
+      });
+      this.props.hideLoading();
+    });
+  }
   render() {
+    let usersOrdered = Object.values(this.props.users).sort((a, b) => (
+      (Object.keys(b.answers).length + Object.keys(b.questions).length) - (Object.keys(a.answers).length + Object.keys(a.questions).length)
+    ))
+    if (this.state.loading) {
+      return <LoadingBar/>
+    }
     return (
       <main>
-        {this.usersOrdered.map((user, index) => {
+        {usersOrdered.map((user, index) => {
           let color = () => {
             switch(index) {
               case 0:
@@ -35,7 +55,13 @@ const mapStateToProps = ({users}) => ({
   users
 })
 
-export default connect(mapStateToProps)(LeaderBoard)
+const mapDispatchToProps = dispatch => ({
+  updateUsers: users => dispatch(receiveUsers(users)),
+  showLoading: () => dispatch(showLoading()),
+  hideLoading: () => dispatch(hideLoading())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LeaderBoard)
 
 function LeaderBoardItem({user, color}) {
   const verticalBar = {

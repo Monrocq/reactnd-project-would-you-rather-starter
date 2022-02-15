@@ -5,7 +5,7 @@ import {addQuestion} from '../actions/questions';
 import { showLoading, hideLoading } from 'react-redux-loading';
 import { useNavigate } from 'react-router';
 
-export const CREATE_PATH = '/question/create';
+export const CREATE_PATH = '/add';
 
 export function NewQuestion({authedUser, showLoading, hideLoading, addNewQuestion}) {
   let navigate = useNavigate();

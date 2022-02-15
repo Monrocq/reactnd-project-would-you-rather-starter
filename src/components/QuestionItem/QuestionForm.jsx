@@ -42,7 +42,7 @@ function QuestionForm({preview, question, authedUser, answered}) {
       </figcaption>
       {preview ? (
         <Link 
-          to={answered ? `/result/${question.id}` : `/question/${question.id}`} 
+          to={answered ? `/result/${question.id}` : `/questions/${question.id}`} 
           className="border-primary-color border-2 rounded w p-1 text-center my-2 text-primary-color"
         >
           View Poll

@@ -11,7 +11,8 @@ export const HOME_PATH = '/';
 
 export class Home extends Component {
   state = {
-    tabIndex: 0
+    tabIndex: 0,
+    loading: false
   }
   constructor(props) {
     super(props);
@@ -26,10 +27,16 @@ export class Home extends Component {
   }
   componentDidMount() {
     this.props.getQuestions({}, this.props.authedUser)
+    this.setState({
+      loading: true
+    })
     this.props.showLoading();
     _getQuestions().then(questions => {
       this.props.getQuestions(questions, this.props.authedUser);
       this.props.hideLoading()
+      this.setState({
+        loading: false
+      })
     })
   }
   render() {
@@ -53,9 +60,11 @@ export class Home extends Component {
             </TabItem>
           </summary>
           <section className="p-3">
-            {Object.keys(questions).length > 0 ? Object.entries(questions).map(([id, question]) => (
+            {Object.keys(questions).length > 0 ? Object.entries(questions).sort(([a, b], [c, d]) => (
+              d.timestamp - b.timestamp
+            )).map(([id, question]) => (
               <QuestionItem key={id} question={question} user={this.props.users[question.author]} answered={this.state.tabIndex === 1} />
-            )) : "Updating..."}
+            )) : this.state.loading ? "Updating..." : "No questions left"}
           </section>
       </main>
     )

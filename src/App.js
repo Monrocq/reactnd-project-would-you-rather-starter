@@ -3,16 +3,17 @@ import {connect} from 'react-redux';
 import {receiveUsers} from './actions/users';
 import './App.css';
 import Header from './components/Header';
-import SignIn, {SIGNIN_PATH} from './components/SignIn';
+import SignIn from './components/SignIn';
 import {_getUsers} from './utils/_DATA';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import Home, {HOME_PATH} from './screens/Home';
 import QuestionItem from './components/QuestionItem';
 import LoadingBar from 'react-redux-loading'
 import NewQuestion, {CREATE_PATH} from './screens/NewQuestion';
 import LeaderBoard, {BOARD_PATH} from './screens/LeaderBoard';
+import NotFound from './screens/NotFound';
 
-function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoading, hideLoading}) {
+function App({authedUser = {id: ""}, loading, getUsers}) {
   useEffect(() => {
     _getUsers().then(users => {
       getUsers(users)
@@ -20,7 +21,7 @@ function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoadin
   }, [getUsers]);
   function loadComponent(component) {
     if (loading) {
-      return <LoadingBar/>
+      return <Navigate to="/"/> 
     }
     return component;
   }
@@ -30,13 +31,14 @@ function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoadin
         <Header />
         <LoadingBar/>
         <Routes>
-          {!authedUser ? <Route path={HOME_PATH} element={<SignIn/>}/> :
+          {!authedUser ? <Route path="*" element={<SignIn/>}/> :
           <>
             <Route exact path={HOME_PATH} element={<Home/>}/>
             <Route exact path={BOARD_PATH} element={<LeaderBoard/>}/>
             <Route exact path={CREATE_PATH} element={loadComponent(<NewQuestion />)}/>
-            <Route exact path='/question/:id' element={loadComponent(<QuestionItem/>)}/>
+            <Route exact path='/questions/:id' element={loadComponent(<QuestionItem/>)}/>
             <Route exact path='/result/:id' element={loadComponent(<QuestionItem answered={true}/>)}/>
+            <Route path="*" element={<NotFound/>}/>
           </>}
         </Routes>
       </div>
@@ -47,13 +49,15 @@ function App({authedUser = {id: ""}, loading, getQuestions, getUsers, showLoadin
 function mapStateToProps({authedUser, questions}) {
   return {
     authedUser,
-    loading: Object.keys(questions).length === 0
+    loading: Object.keys(questions).length === 0,
+    questions
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    getUsers: users => dispatch(receiveUsers(users))
+    getUsers: users => dispatch(receiveUsers(users)),
+    dispatch
   }
 }
 

@@ -3,13 +3,17 @@ import {connect} from 'react-redux';
 import logo from '../../assets/logo.svg';
 import './style.css';
 import { setAuthedUser } from '../../actions/authedUser';
+import { useNavigate } from 'react-router';
+import {HOME_PATH} from '../../screens/Home';
 
 export const SIGNIN_PATH = '/signin'
 
 function SignIn({users, dispatch}) {
+  let navigate = useNavigate();
   function signIn(e) {
     e.preventDefault()
     dispatch(setAuthedUser(users[e.target.elements[0].value]))
+    navigate(HOME_PATH);
   }
   return (
     <div className="container max-w-2xl mx-auto border-gray-300 border-2 my-5">

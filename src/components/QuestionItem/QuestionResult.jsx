@@ -32,7 +32,7 @@ function ResultItem({out, votes, active, entitled}) {
       </h4>
       <div className="relative bg-gray-200 rounded-xl mt-3">
         <p className="absolute mx-auto text-center text-xs text-white" style={{
-          left: percent-10+"%"
+          left: percent > 15 ? percent-10+"%" : percent+2+"%"
         }}>
           {percent.toPrecision(3)+"%"}
         </p>

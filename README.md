@@ -6,6 +6,13 @@ The `_DATA.js` file represents a fake database and methods that let you access t
 
 Thanks to the provided starter code, I built a React/Redux front end application.
 
+# Installation
+
+1. Clone this project to your local folder
+2. From the root folder, install the dependencies with npm
+3. React-redux-loading is the plugin from the Udacity course but it's Unmaintained. So you need to overtake the warning.
+4. You can launch the server thanks to "yarn start"
+
 ## Data
 
 There are two types of objects stored in our database:

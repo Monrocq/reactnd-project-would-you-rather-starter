@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import TabItem from '../components/home/TabItem';
+import TabItem from '../components/Home/TabItem';
 import QuestionItem from '../components/QuestionItem';
 import LoadingBar from 'react-redux-loading';
 import { getQuestions, receiveQuestions } from '../actions/questions';

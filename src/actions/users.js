@@ -1,7 +1,7 @@
-import { showLoading, hideLoading } from 'react-redux-loading';
 import {fetchUsers} from '../utils/api';
 
 export const RECEIVE_USERS = 'RECEIVE_USERS';
+export const ADD_USER_ANSWER = 'ADD_USER_ANSWER';
 
 export function receiveUsers(users) {
   return {
@@ -12,9 +12,16 @@ export function receiveUsers(users) {
 
 export function getUsers() {
   return async dispatch => {
-    dispatch(showLoading());
     const users = await fetchUsers();
-    dispatch(receiveUsers(users));
-    return dispatch(hideLoading());
+    return dispatch(receiveUsers(users));
+  }
+}
+
+export function addUserAnswer(authedUser, qid, answer) {
+  return {
+    type: ADD_USER_ANSWER,
+    qid,
+    answer,
+    authedUser
   }
 }

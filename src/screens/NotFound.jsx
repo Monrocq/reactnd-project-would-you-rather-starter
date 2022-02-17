@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
+import {useParams} from 'react-router';
 
-export class NotFound extends Component {
-  render() {
-    return (
-      <div>
-        Page introuvable
-      </div>
-    )
-  }
+function NotFound() {
+  const params = useParams();
+  let uri = Object.values(params)[0]
+  return (
+    <div>
+      {uri === "404" ? "Question not found" : "Page not found"}
+    </div>
+  )
 }
 
 const mapStateToProps = (state) => ({

@@ -1,28 +1,17 @@
 import React from 'react'
-import {_saveQuestion} from '../utils/_DATA';
 import {connect} from 'react-redux';
-import {addQuestion} from '../actions/questions';
-import { showLoading, hideLoading } from 'react-redux-loading';
+import {handleAddQuestion} from '../actions/questions';
 import { useNavigate } from 'react-router';
 import {HOME_PATH} from './Home';
 
 export const CREATE_PATH = '/add';
 
-export function NewQuestion({authedUser, showLoading, hideLoading, addNewQuestion}) {
+export function NewQuestion({addNewQuestion}) {
   let navigate = useNavigate();
   function handleSubmit(e) {
     e.preventDefault();
-    const question = {
-      optionOneText: e.target.elements[0].value,
-      optionTwoText: e.target.elements[1].value,
-      author: authedUser.id
-    }
-    showLoading();
-    _saveQuestion(question).then(result => {
-      addNewQuestion(result);
-      navigate(HOME_PATH)
-      hideLoading()
-    }).catch(error => console.log(error))
+    addNewQuestion(e.target.elements)
+    navigate(HOME_PATH)
   }
   const inputStyle = "border-2 border-gray-100 w-full py-1 px-3 hover:border-primary-color"
   return (
@@ -47,15 +36,13 @@ export function NewQuestion({authedUser, showLoading, hideLoading, addNewQuestio
   )
 }
 
-const mapStateToProps = ({authedUser}) => {
-  return {authedUser}
+const mapStateToProps = store => {
+  return {store}
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    addNewQuestion: question => dispatch(addQuestion(question)),
-    showLoading: () => dispatch(showLoading()),
-    hideLoading: () => dispatch(hideLoading())
+    addNewQuestion: async answers => await dispatch(handleAddQuestion(answers)),
   }
 }
 

@@ -1,12 +1,17 @@
-import { ADD_QUESTION, RECEIVE_QUESTIONS } from "../actions/questions";
+import { ADD_QUESTION, ADD_QUESTION_ANSWER, RECEIVE_QUESTIONS, SORT_QUESTIONS } from "../actions/questions";
 
-export default function questions (state = {}, {type, questions, authedUser, question}) {
-  switch(type) {
+export default function questions (state = {}, action) {
+  switch(action.type) {
     case RECEIVE_QUESTIONS:
+      return {
+        ...state,
+        unsorted: action.questions
+      }
+    case SORT_QUESTIONS:
       let unansweredQuestions = {};
       let answeredQuestions = {};
-      Object.entries(questions).forEach(([key, value]) => {
-        if (value.optionOne.votes.includes(authedUser) || value.optionTwo.votes.includes(authedUser)) {
+      Object.entries(action.questions).forEach(([key, value]) => {
+        if (value.optionOne.votes.includes(action.authedUser) || value.optionTwo.votes.includes(action.authedUser)) {
           answeredQuestions[key] = value;
         } else {
           unansweredQuestions[key] = value;
@@ -22,7 +27,21 @@ export default function questions (state = {}, {type, questions, authedUser, que
         ...state,
         unansweredQuestions: {
           ...state.unansweredQuestions,
-          [question.id]: question
+          [action.question.id]: action.question
+        }
+      }
+    case ADD_QUESTION_ANSWER:
+      return {
+        ...state,
+        answeredQuestions: {
+          ...state.unansweredQuestions,
+          [action.qid]: {
+            ...state.unansweredQuestions[action.qid],
+            [action.answer]: {
+              ...state.unansweredQuestions[action.qid][action.answer],
+              votes: state.unansweredQuestions[action.qid][action.answer].votes.concat([action.authedUser])
+            }
+          }
         }
       }
     default:

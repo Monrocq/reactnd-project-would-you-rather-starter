@@ -3,17 +3,16 @@ import {connect} from 'react-redux';
 import logo from '../../assets/logo.svg';
 import './style.css';
 import { setAuthedUser } from '../../actions/authedUser';
-import { useNavigate } from 'react-router';
-import {HOME_PATH} from '../../screens/Home';
+import {sortQuestions} from '../../actions/questions';
 
 export const SIGNIN_PATH = '/signin'
 
-function SignIn({users, dispatch}) {
-  let navigate = useNavigate();
-  function signIn(e) {
+function SignIn({users, questions, dispatch}) {
+  async function signIn(e) {
     e.preventDefault()
-    dispatch(setAuthedUser(users[e.target.elements[0].value]))
-    navigate(HOME_PATH);
+    let user = users[e.target.elements[0].value];
+    await dispatch(sortQuestions(questions.unsorted, user.id))
+    await dispatch(setAuthedUser(user));
   }
   return (
     <div className="container max-w-2xl mx-auto border-gray-300 border-2 my-5">
@@ -37,9 +36,10 @@ function SignIn({users, dispatch}) {
   )
 }
 
-function mapStateToProps ({users}) {
+function mapStateToProps ({users, questions}) {
   return {
-    users
+    users,
+    questions
   }
 }
 

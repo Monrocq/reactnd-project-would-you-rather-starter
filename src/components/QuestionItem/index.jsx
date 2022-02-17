@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import {useParams} from 'react-router-dom';
+import {Navigate, useParams} from 'react-router-dom';
 import QuestionForm from './QuestionForm';
 import QuestionResult from './QuestionResult';
 
@@ -9,6 +9,9 @@ function QuestionItem({question, user, questions, users, authedUser, answered = 
   const params = useParams();
   const preview = !!question;
   question ??= answered ? questions.answeredQuestions[params.id] : questions.unansweredQuestions[params.id];
+  if (question === undefined) {
+    return <Navigate to='/404'/>
+  }
   user ??= users[question.author];
   return (
     <div className="border-gray-300 border-2 rounded m-5 max-w-2xl mx-auto">
